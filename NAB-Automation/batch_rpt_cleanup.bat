@@ -2,7 +2,6 @@
 :: CLEAN UP PREVIOUS REPORTS
 echo:
 echo #### Clean up junk files
-del /f /q /s "%~dp0\test.log"
 del /f /q /s "%~dp0\reports\*.*"
 rmdir /q /s "%~dp0\reports\"
 del /f /q /s "%~dp0\temp\*.*"

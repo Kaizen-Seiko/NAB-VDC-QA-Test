@@ -1,2 +1,2 @@
 @echo OFF
-allure serve "%~dp0\reports"
+"%~dp0\allure\bin\allure" serve "%~dp0\reports"
