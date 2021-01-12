@@ -1,8 +1,21 @@
 import logging
 import os
+import pandas as pd
 from datetime import datetime
 from time import time, sleep
 from requests.cookies import RequestsCookieJar
+
+
+def load_resource(path, sheetname):
+    """
+    Generate scenarios from resource excel file
+    @author: lex.khuat
+    """
+    result = []
+    data = pd.read_excel(open(path, 'rb'), sheet_name=sheetname, engine='openpyxl')
+    for row in data.values:
+        result.append(Scenario.gen(row[0], tuple(row[1:])))
+    return result
 
 
 class Scenario(tuple):
@@ -108,18 +121,6 @@ class BaseAPITest(BaseTest):
         for cookie in driver.get_cookies():
             var_cookies.set(cookie['name'], cookie['value'])
         return var_cookies
-
-    def build_headers(self):
-        return {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                          'Chrome/83.0.4103.61 Safari/537.36',
-            'Accept-Encoding': 'gzip, deflate',
-            'Accept-Language': 'en-US',
-            'Accept': 'application/json,text/json,text/html,application/xhtml+xml,application/xml;q=0.9'
-                      ',image/webp,image/apng,*/*;q=0.8, application/signed-exchange;v=b3;q=0.9'
-        }
-
-    headers = property(build_headers)
 
 
 class BaseUITest(BaseTest):

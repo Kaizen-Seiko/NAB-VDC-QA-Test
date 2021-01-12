@@ -1,7 +1,14 @@
 import allure
 import pytest
+from selenium.common.exceptions import ElementNotVisibleException
 from selenium.webdriver.common.keys import Keys
 from pom.environment import *
+
+# Data driven
+scenarios = [Scenario.gen('Few results', ('Hanoi', 350370)),
+             Scenario.gen('Dozen results', ('London', 16541918)),
+             Scenario.gen('No results', ('Koala', 14221964)),
+             ]
 
 
 @allure.feature('#1 - [OpenWeather] Weather in your city')
@@ -26,23 +33,27 @@ class TestWeb_SearchFromMain(BaseUITest):
             self.driver.is_visible(OW_PF.pageMain.txtSearch, self.timeout/2)
             self.driver.input_text(OW_PF.pageMain.txtSearch, 'Hanoi')
         with allure.step(f'AND He clicks on submit button'):
-            self.driver.click(OW_PF.pageMain.btnSubmit)
+            try:
+                self.driver.click(OW_PF.pageMain.btnSubmit)
+            except ElementNotVisibleException:
+                assert False, 'Could not find submit button on GUI'
         with allure.step(f'THEN Search result page is navigated'):
-            assert self.driver.is_visible(OW_PF.pageWeatherInYourCity.imgTitle, self.timeout/2),\
+            assert self.driver.is_visible(OW_PF.pageWeatherInYourCity.imgTitle, self.timeout / 2), \
                 'Failed to detect search result page after submit'
 
+    @pytest.mark.parametrize('keyword, results', *Scenario.parse(scenarios, False))
     @allure.severity(allure.severity_level.CRITICAL)
-    def test_web_tc003_search_mainpage(self):
+    def test_web_tc003_search_mainpage(self, keyword, results):
         with allure.step(f'GIVEN Guest is on Main Page'):
             OW_PF.pageMain.go()
-        with allure.step(f'WHEN He input a valid city name into search box'):
+        with allure.step(f'WHEN He inputs a valid city name into search box'):
             self.driver.is_visible(OW_PF.pageMain.txtSearch, self.timeout/2)
-            self.driver.input_text(OW_PF.pageMain.txtSearch, 'Hanoi')
-        with allure.step(f'AND He press Enter'):
+            self.driver.input_text(OW_PF.pageMain.txtSearch, keyword)
+        with allure.step(f'AND He presses Enter'):
             self.driver.send_keys(OW_PF.pageMain.txtSearch, Keys.ENTER)
         with allure.step(f'THEN Search result page is navigated'):
             assert self.driver.is_visible(OW_PF.pageWeatherInYourCity.imgTitle, self.timeout/2),\
                 'Failed to detect search result page after submit'
         with allure.step(f'AND Keyword retains in result search box'):
-            assert 'Hanoi' in self.driver.get_value(OW_PF.pageWeatherInYourCity.txtSearch),\
+            assert keyword in self.driver.get_value(OW_PF.pageWeatherInYourCity.txtSearch),\
                 'Searched keyword does not retain in search box'

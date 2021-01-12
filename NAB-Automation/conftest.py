@@ -54,9 +54,10 @@ def handle_failed(request):
         for val in request.cls.__dict__.values():
             if isinstance(val, WebDriver):
                 try:
-                    allure.attach(val.driver.get_screenshot_as_png(),
-                                  name=request.node.name,
-                                  attachment_type=allure.attachment_type.PNG)
+                    if val.driver is not None:
+                        allure.attach(val.driver.get_screenshot_as_png(),
+                                      name=request.node.name,
+                                      attachment_type=allure.attachment_type.PNG)
                 except UnexpectedAlertPresentException as e:
                     print('Failed to capture screenshot. Skipped...')
                 break

@@ -509,6 +509,12 @@ class WebDriver(object):
 
     # Keyboard
     def send_keys(self, locator, key):
+        """
+        Focus element then press key on keyboard
+        @param locator: xpath expression
+        @param key: key to press (webdriver.common.keys import Keys)
+        @return: self
+        """
         self.__autofind__(locator).send_keys(key)
         return self
 
