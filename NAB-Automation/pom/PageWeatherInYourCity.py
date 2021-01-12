@@ -15,6 +15,8 @@ class PageWeatherInYourCity(PageCommon):
     txtSearch = (By.CSS_SELECTOR, "input#search_str")
     btnSubmit = (By.CSS_SELECTOR, "button[type=submit]")
 
+    tblResult = (By.CSS_SELECTOR, "#forecast_list_ul>table")
+
     # Private #
     def __init__(self, driver):
         super(PageWeatherInYourCity, self).__init__(driver)
