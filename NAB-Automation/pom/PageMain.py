@@ -12,7 +12,10 @@ class PageMain(PageCommon):
 
     # Controls #
     imgTitle = (By.XPATH, "//*[@class='orange-text' and normalize-space(text())='OpenWeather']")
-    txtSearch = (By.XPATH, "//form[@id='nav-search-form']/*[@placeholder='Weather in your city']")
+    txtSearch = (By.XPATH, "//*[@id='header-website']"
+                           "//form[@id='nav-search-form']/*[@placeholder='Weather in your city']")
+    btnSubmit = (By.XPATH, "//*[@id='header-website']"
+                           "//form[@id='nav-search-form']/*[@type='submit']")
 
     # Private #
     def __init__(self, driver):

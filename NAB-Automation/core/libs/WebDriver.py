@@ -507,6 +507,11 @@ class WebDriver(object):
         # TODO
         return self
 
+    # Keyboard
+    def send_keys(self, locator, key):
+        self.__autofind__(locator).send_keys(key)
+        return self
+
     # Script
     def execute_javascript(self, script):
         """

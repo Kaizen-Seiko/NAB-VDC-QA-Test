@@ -3,6 +3,7 @@ import pytest
 from selenium.common.exceptions import UnexpectedAlertPresentException, WebDriverException
 from pom.environment import *
 from pom.PageMain import PageMain
+from pom.PageWeatherInYourCity import PageWeatherInYourCity
 
 
 # Session scope
@@ -19,6 +20,7 @@ def init_environment(request):
         OW_PF.switchEnv(OW_PF.get(domain))
 
         OW_PF.addPage('pageMain', PageMain)
+        OW_PF.addPage('pageWeatherInYourCity', PageWeatherInYourCity)
 
         request.cls.environment = OW_PF.environment
         request.cls.driver = OW_PF.engine
